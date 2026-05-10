@@ -1,0 +1,507 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package SRC;
+import java.awt.Color;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+/**
+ *
+ * @author reyes
+ */
+public class Ginto extends javax.swing.JPanel {
+    
+   
+
+    private SRC.NewJFrame frame;
+    public Ginto(SRC.NewJFrame frame) {
+        this.frame = frame;
+        
+      
+        initComponents();
+        // Load all rooms
+        loadRoomStatus(R1, "001");
+        loadRoomStatus(R2, "002");
+        loadRoomStatus(R3, "003");
+        loadRoomStatus(R4, "004");
+        loadRoomStatus(R5, "005");
+        loadRoomStatus(R6, "006");
+        loadRoomStatus(R7, "007");
+        loadRoomStatus(R8, "008");
+        loadRoomStatus(R9, "009");
+        loadRoomStatus(R10, "010");
+    }
+
+    // 🔥 UPDATE OR INSERT ROOM
+    public static void updateRoom(String number, String roomtype, String details, double rate, String status) {
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/hms",
+                    "root",
+                    ""
+            );
+
+            String sql =
+                    "UPDATE rooms SET room_type=?, details=?, rate=?, status=? WHERE room_number=?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, roomtype);
+            ps.setString(2, details);
+            ps.setDouble(3, rate);
+            ps.setString(4, status);
+            ps.setString(5, number);
+
+            int updated = ps.executeUpdate();
+
+            if (updated == 0) {
+
+                String insert =
+                        "INSERT INTO rooms (room_number, room_type, details, rate, status) VALUES (?, ?, ?, ?, ?)";
+
+                PreparedStatement ps2 = con.prepareStatement(insert);
+
+                ps2.setString(1, number);
+                ps2.setString(2, roomtype);
+                ps2.setString(3, details);
+                ps2.setDouble(4, rate);
+                ps2.setString(5, status);
+
+                ps2.executeUpdate();
+                ps2.close();
+            }
+
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 🔥 ROOM CLICK → GO TO ROOM INFO
+    public static String selectedRoom;
+
+    public void openRoom(String roomNumber, JButton button) {
+        
+        //green
+        if (button.getBackground().equals(new Color(51, 153, 0))) {
+
+        selectedRoom = roomNumber;
+        frame.setContentPane(new RoomInfo(frame, roomNumber));
+        frame.revalidate();
+
+        } else {
+
+            int choice = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to open this room?",
+                    "Open Room",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (choice == JOptionPane.YES_OPTION) {
+
+                // make room open again
+                //red
+                button.setBackground(new Color(51, 153, 0));
+
+                updateRoom(
+                        roomNumber,
+                        "Ginto",
+                        "Golden Room",
+                        1000.00,
+                        "Open"
+                );
+
+                JOptionPane.showMessageDialog(this, "Room is now OPEN.");
+            }
+        }
+    }
+
+    // 🔥 LOAD ROOM COLOR FROM DB
+    public void loadRoomStatus(JButton btn, String room) {
+
+        try {
+
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/hms",
+                    "root",
+                    ""
+            );
+
+            String sql = "SELECT status FROM rooms WHERE room_number=?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, room);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                String status = rs.getString("status");
+
+                if (status.equals("Booked")) {
+                    btn.setBackground(Color.RED);
+                } else if (status.equals("Open")) {
+                    btn.setBackground(new Color(51, 153, 0));
+                }
+
+                btn.setOpaque(true);
+                btn.setBorderPainted(false);
+            }
+
+            rs.close();
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+   
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        P_suites = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        users = new javax.swing.JButton();
+        guests = new javax.swing.JButton();
+        transactions = new javax.swing.JButton();
+        suites = new javax.swing.JButton();
+        home = new javax.swing.JButton();
+        register = new javax.swing.JButton();
+        R1 = new javax.swing.JButton();
+        R2 = new javax.swing.JButton();
+        R3 = new javax.swing.JButton();
+        R4 = new javax.swing.JButton();
+        R5 = new javax.swing.JButton();
+        R6 = new javax.swing.JButton();
+        R7 = new javax.swing.JButton();
+        R8 = new javax.swing.JButton();
+        R9 = new javax.swing.JButton();
+        R10 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
+        setLayout(null);
+
+        P_suites.setBackground(new java.awt.Color(102, 0, 0));
+
+        jLabel2.setBackground(new java.awt.Color(102, 0, 0));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("ROOMS");
+        P_suites.add(jLabel2);
+
+        add(P_suites);
+        P_suites.setBounds(20, 80, 50, 20);
+
+        users.setBorderPainted(false);
+        users.setContentAreaFilled(false);
+        users.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usersActionPerformed(evt);
+            }
+        });
+        add(users);
+        users.setBounds(610, 20, 70, 30);
+
+        guests.setBorderPainted(false);
+        guests.setContentAreaFilled(false);
+        guests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guestsActionPerformed(evt);
+            }
+        });
+        add(guests);
+        guests.setBounds(680, 20, 70, 30);
+
+        transactions.setBorderPainted(false);
+        transactions.setContentAreaFilled(false);
+        transactions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transactionsActionPerformed(evt);
+            }
+        });
+        add(transactions);
+        transactions.setBounds(770, 20, 70, 30);
+
+        suites.setBorderPainted(false);
+        suites.setContentAreaFilled(false);
+        suites.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                suitesActionPerformed(evt);
+            }
+        });
+        add(suites);
+        suites.setBounds(840, 20, 70, 30);
+
+        home.setBorderPainted(false);
+        home.setContentAreaFilled(false);
+        home.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeActionPerformed(evt);
+            }
+        });
+        add(home);
+        home.setBounds(900, 20, 60, 30);
+
+        register.setBorderPainted(false);
+        register.setContentAreaFilled(false);
+        register.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerActionPerformed(evt);
+            }
+        });
+        add(register);
+        register.setBounds(540, 20, 70, 30);
+
+        R1.setBackground(new java.awt.Color(51, 153, 0));
+        R1.setText("R - 001");
+        R1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                R1StateChanged(evt);
+            }
+        });
+        R1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R1ActionPerformed(evt);
+            }
+        });
+        add(R1);
+        R1.setBounds(126, 185, 90, 90);
+
+        R2.setBackground(new java.awt.Color(51, 153, 0));
+        R2.setText("R - 002");
+        R2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R2ActionPerformed(evt);
+            }
+        });
+        add(R2);
+        R2.setBounds(283, 185, 90, 90);
+
+        R3.setBackground(new java.awt.Color(51, 153, 0));
+        R3.setText("R - 003");
+        R3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R3ActionPerformed(evt);
+            }
+        });
+        add(R3);
+        R3.setBounds(441, 185, 90, 90);
+
+        R4.setBackground(new java.awt.Color(51, 153, 0));
+        R4.setText("R - 004");
+        R4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R4ActionPerformed(evt);
+            }
+        });
+        add(R4);
+        R4.setBounds(597, 185, 90, 90);
+
+        R5.setBackground(new java.awt.Color(51, 153, 0));
+        R5.setText("R - 005");
+        R5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R5ActionPerformed(evt);
+            }
+        });
+        add(R5);
+        R5.setBounds(752, 185, 90, 90);
+
+        R6.setBackground(new java.awt.Color(51, 153, 0));
+        R6.setText("R - 006");
+        R6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R6ActionPerformed(evt);
+            }
+        });
+        add(R6);
+        R6.setBounds(128, 337, 90, 90);
+
+        R7.setBackground(new java.awt.Color(51, 153, 0));
+        R7.setText("R - 007");
+        R7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R7ActionPerformed(evt);
+            }
+        });
+        add(R7);
+        R7.setBounds(283, 337, 90, 90);
+
+        R8.setBackground(new java.awt.Color(51, 153, 0));
+        R8.setText("R - 008");
+        R8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R8ActionPerformed(evt);
+            }
+        });
+        add(R8);
+        R8.setBounds(440, 337, 90, 90);
+
+        R9.setBackground(new java.awt.Color(51, 153, 0));
+        R9.setText("R - 009");
+        R9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R9ActionPerformed(evt);
+            }
+        });
+        add(R9);
+        R9.setBounds(597, 337, 90, 90);
+
+        R10.setBackground(new java.awt.Color(51, 153, 0));
+        R10.setText("R - 010");
+        R10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R10ActionPerformed(evt);
+            }
+        });
+        add(R10);
+        R10.setBounds(754, 337, 90, 90);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/rooms (ginto).png"))); // NOI18N
+        add(jLabel1);
+        jLabel1.setBounds(0, 0, 960, 540);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
+        frame.setContentPane(new Register(frame));
+        frame.revalidate();
+    }//GEN-LAST:event_registerActionPerformed
+
+    private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
+        frame.setContentPane(new Dashboard(frame));
+        frame.revalidate();
+    }//GEN-LAST:event_homeActionPerformed
+
+    private void guestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guestsActionPerformed
+        frame.setContentPane(new GuestList(frame));
+        frame.revalidate();
+    }//GEN-LAST:event_guestsActionPerformed
+
+    private void transactionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactionsActionPerformed
+        frame.setContentPane(new Transactions(frame));
+        frame.revalidate();
+    }//GEN-LAST:event_transactionsActionPerformed
+
+    private void suitesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suitesActionPerformed
+       frame.setContentPane(new Suites(frame));
+        frame.revalidate();
+    }//GEN-LAST:event_suitesActionPerformed
+
+    private void usersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersActionPerformed
+        frame.setContentPane(new UserList(frame));
+        frame.revalidate();
+    }//GEN-LAST:event_usersActionPerformed
+
+    private void R1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R1ActionPerformed
+       // openRoom("001");
+
+            openRoom("001", R1);
+
+    }//GEN-LAST:event_R1ActionPerformed
+
+    private void R1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_R1StateChanged
+       
+    }//GEN-LAST:event_R1StateChanged
+
+    private void R2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R2ActionPerformed
+        
+            openRoom("002", R2);
+
+    }//GEN-LAST:event_R2ActionPerformed
+
+    private void R3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R3ActionPerformed
+      
+            openRoom("003", R3);
+
+      
+    }//GEN-LAST:event_R3ActionPerformed
+
+    private void R4ActionPerformed(java.awt.event.ActionEvent evt) {
+       
+            openRoom("004", R4);
+            
+    }
+
+    private void R5ActionPerformed(java.awt.event.ActionEvent evt) {
+      
+            openRoom("005", R5);
+    }
+    private void R6ActionPerformed(java.awt.event.ActionEvent evt) {
+       
+            openRoom("006", R6);
+
+    }
+
+    private void R7ActionPerformed(java.awt.event.ActionEvent evt) {
+        
+            openRoom("007", R7);
+
+    }
+
+    private void R8ActionPerformed(java.awt.event.ActionEvent evt) {
+       
+            openRoom("008", R8);
+
+    }
+
+    private void R9ActionPerformed(java.awt.event.ActionEvent evt) {
+       
+            openRoom("009", R9);
+
+    }
+
+    private void R10ActionPerformed(java.awt.event.ActionEvent evt) {
+      
+            openRoom("010", R10);
+
+    }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel P_suites;
+    public static javax.swing.JButton R1;
+    private javax.swing.JButton R10;
+    private javax.swing.JButton R2;
+    private javax.swing.JButton R3;
+    private javax.swing.JButton R4;
+    private javax.swing.JButton R5;
+    private javax.swing.JButton R6;
+    private javax.swing.JButton R7;
+    private javax.swing.JButton R8;
+    private javax.swing.JButton R9;
+    private javax.swing.JButton guests;
+    private javax.swing.JButton home;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton register;
+    private javax.swing.JButton suites;
+    private javax.swing.JButton transactions;
+    private javax.swing.JButton users;
+    // End of variables declaration//GEN-END:variables
+} 
+
+
