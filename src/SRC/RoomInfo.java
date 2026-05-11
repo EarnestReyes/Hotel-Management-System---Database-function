@@ -5,19 +5,28 @@
 package SRC;
 
 import java.sql.PreparedStatement;
+import javax.swing.JPanel;
 
 /**
  *
  * @author reyes
  */
 public class RoomInfo extends javax.swing.JPanel {
-    private String roomNumber;
+    private String roomNumber, roomType, details;
+    private double rate;
+    private JPanel backp;
     private SRC.NewJFrame frame;
-    public RoomInfo(SRC.NewJFrame frame, String RN) {
+    public RoomInfo(SRC.NewJFrame frame, String RN, String roomType, String details, double rate, JPanel backp) {
+     
+        this.roomType = roomType;
+        this.details = details;
+        this.rate = rate;
         this.roomNumber = RN;
+        this.backp = backp;
         this.frame = frame;
     
         initComponents();
+        suite.setText(String.valueOf(roomNumber));
         
     }
     
@@ -32,6 +41,17 @@ public class RoomInfo extends javax.swing.JPanel {
 
         P_suites = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        firstname = new javax.swing.JTextField();
+        lastname = new javax.swing.JTextField();
+        phone = new javax.swing.JTextField();
+        CI = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
+        location = new javax.swing.JTextField();
+        age = new javax.swing.JTextField();
+        birthday = new javax.swing.JTextField();
+        residence = new javax.swing.JTextField();
+        CO = new javax.swing.JTextField();
+        suite = new javax.swing.JTextField();
         back = new javax.swing.JButton();
         proceed = new javax.swing.JButton();
         users = new javax.swing.JButton();
@@ -55,6 +75,34 @@ public class RoomInfo extends javax.swing.JPanel {
 
         add(P_suites);
         P_suites.setBounds(840, 20, 60, 26);
+        add(firstname);
+        firstname.setBounds(203, 200, 170, 22);
+        add(lastname);
+        lastname.setBounds(203, 253, 170, 22);
+        add(phone);
+        phone.setBounds(203, 305, 170, 22);
+        add(CI);
+        CI.setBounds(203, 357, 170, 22);
+        add(email);
+        email.setBounds(678, 148, 170, 22);
+
+        location.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                locationActionPerformed(evt);
+            }
+        });
+        add(location);
+        location.setBounds(683, 201, 170, 22);
+        add(age);
+        age.setBounds(683, 253, 170, 22);
+        add(birthday);
+        birthday.setBounds(683, 305, 170, 22);
+        add(residence);
+        residence.setBounds(683, 358, 170, 22);
+        add(CO);
+        CO.setBounds(203, 410, 170, 22);
+        add(suite);
+        suite.setBounds(203, 148, 170, 22);
 
         back.setBorderPainted(false);
         back.setContentAreaFilled(false);
@@ -172,77 +220,44 @@ public class RoomInfo extends javax.swing.JPanel {
     }//GEN-LAST:event_usersActionPerformed
 
     private void proceedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proceedActionPerformed
-        try {
-    
-   
-    String roomType = "Ginto";
-    String details = "Golden Room";
-    double rate = 1000.00;
-
-    java.sql.Connection con = java.sql.DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/hms",
-            "root",
-            ""
-    );
-
-    String sql =
-            "UPDATE rooms SET room_type=?, details=?, rate=?, status=? WHERE room_number=?";
-
-    java.sql.PreparedStatement ps = con.prepareStatement(sql);
-
-    ps.setString(1, roomType);
-    ps.setString(2, details);
-    ps.setDouble(3, rate);
-    ps.setString(4, "Booked");
-    ps.setString(5, roomNumber);
-
-    int updated = ps.executeUpdate();
-
-    ps.close();
-
-    if (updated == 0) {
-
-        String insert =
-                "INSERT INTO rooms (room_number, room_type, details, rate, status) VALUES (?, ?, ?, ?, ?)";
-
-        java.sql.PreparedStatement ps2 = con.prepareStatement(insert);
-
-        ps2.setString(1, roomNumber);
-        ps2.setString(2, roomType);
-        ps2.setString(3, details);
-        ps2.setDouble(4, rate);
-        ps2.setString(5, "Booked");
-
-        ps2.executeUpdate();
-        ps2.close();
-    }
-
-    con.close();
-
-    javax.swing.JOptionPane.showMessageDialog(this, "Room Booked!");
-
-    frame.setContentPane(new Ginto(frame));
-    frame.revalidate();
-
-} catch (Exception e) {
-    e.printStackTrace();
-}
+  
+        int Age = Integer.parseInt(age.getText().toString());
+        frame.setContentPane(new payment_info(frame, roomNumber, firstname.getText(), lastname.getText(),
+        phone.getText(), CI.getText(), CO.getText(), email.getText(), location.getText(),
+        Age, birthday.getText(), residence.getText(), roomType, rate, details, backp));
+        frame.revalidate();
     }//GEN-LAST:event_proceedActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
-        // TODO add your handling code here:
+        frame.setContentPane(backp);
+        frame.revalidate();
     }//GEN-LAST:event_backActionPerformed
+
+    private void locationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_locationActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CI;
+    private javax.swing.JTextField CO;
     private javax.swing.JPanel P_suites;
+    private javax.swing.JTextField age;
     private javax.swing.JButton back;
+    private javax.swing.JTextField birthday;
+    private javax.swing.JTextField email;
+    private javax.swing.JTextField firstname;
     private javax.swing.JButton guests;
     private javax.swing.JButton home;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField lastname;
+    private javax.swing.JTextField location;
+    private javax.swing.JTextField phone;
     private javax.swing.JButton proceed;
     private javax.swing.JButton register;
+    private javax.swing.JTextField residence;
+    private javax.swing.JTextField suite;
     private javax.swing.JButton suites;
     private javax.swing.JButton transactions;
     private javax.swing.JButton users;
