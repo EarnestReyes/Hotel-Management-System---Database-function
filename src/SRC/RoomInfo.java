@@ -222,6 +222,7 @@ public class RoomInfo extends javax.swing.JPanel {
     private void proceedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proceedActionPerformed
   
         int Age = Integer.parseInt(age.getText().toString());
+        
         frame.setContentPane(new payment_info(frame, roomNumber, firstname.getText(), lastname.getText(),
         phone.getText(), CI.getText(), CO.getText(), email.getText(), location.getText(),
         Age, birthday.getText(), residence.getText(), roomType, rate, details, backp));
